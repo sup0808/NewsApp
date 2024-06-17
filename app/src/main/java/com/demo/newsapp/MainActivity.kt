@@ -1,5 +1,6 @@
 package com.demo.newsapp
 
+import NavigatorRoute
 import SplashScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -21,8 +22,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            SplashScreen()
-
+            NavigatorRoute()
         }
     }
 
