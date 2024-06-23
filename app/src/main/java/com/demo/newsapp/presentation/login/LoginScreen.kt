@@ -19,7 +19,10 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
+import androidx.compose.material.Checkbox
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 
 
@@ -30,11 +33,8 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.IconButton
 
-import androidx.compose.material3.TextFieldColors
+
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -49,11 +49,18 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.demo.newsapp.presentation.login.LoginViewModel
+import com.demo.newsapp.presentation.login.state.LoginEvent
+
 
 
 @Composable
-fun LoginScreen(navController: NavHostController) {
+fun LoginScreen(
+    navController: NavHostController,
+    loginViewModel: LoginViewModel = hiltViewModel()
+) {
 
     Box(
         modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
@@ -77,16 +84,29 @@ fun LoginScreen(navController: NavHostController) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 UserNameField(
-                    value = "Username", onChange = { }, modifier = Modifier.fillMaxWidth()
+                    value = "Username",
+                    onChange = {
+                        loginViewModel.onAction(LoginEvent.EmailChanged(it))
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    isError = loginViewModel.errorState.value.emailStatus
+
                 )
                 PasswordTextField(
-                    value = "Password", onChange = { }, modifier = Modifier.fillMaxWidth()
+                    value = "Password",
+                    onChange = {
+                      loginViewModel.onAction(LoginEvent.PasswordChanged(it))
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    isError = loginViewModel.errorState.value.emailStatus
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Button(
-                    onClick = {},
+                    onClick = {
+                              loginViewModel.validateUserLogin()
+                    },
                     modifier = Modifier
                         .wrapContentWidth()
                         .width(100.dp),
@@ -97,7 +117,7 @@ fun LoginScreen(navController: NavHostController) {
                 }
                 Spacer(modifier = Modifier.height(10.dp))
 
-                LabeledCheckBox("Remember me",false,"Forgot password?"){
+                LabeledCheckBox("Remember me", false, "Forgot password?") {
 
                 }
             }
@@ -113,7 +133,10 @@ fun UserNameField(
     onChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     label: String = "Username",
-    placeholder: String = "Enter the username"
+    placeholder: String = "Enter the Email id",
+    isError: Boolean ,
+    error: String = "Please enter valid email id"
+
 ) {
     val leadingIcon = @Composable {
         Icon(
@@ -134,13 +157,21 @@ fun UserNameField(
          ),*/
         placeholder = { Text(placeholder, style = TextStyle(color = Color.LightGray)) },
         label = { Text(label, style = TextStyle(color = Color.DarkGray)) },
-
         singleLine = true,
         visualTransformation = VisualTransformation.None,
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Color.DarkGray, textColor = Color.DarkGray
         ),
-    )
+        isError = isError
+        )
+    if (isError) {
+        Text(
+            text = error,
+            color = MaterialTheme.colors.error,
+            style = MaterialTheme.typography.caption,
+            modifier = Modifier.padding(start = 16.dp, top = 0.dp)
+        )
+    }
 
 }
 
@@ -151,7 +182,9 @@ fun PasswordTextField(
     onChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     label: String = "Password",
-    placeholder: String = "Enter the password"
+    placeholder: String = "Enter the password",
+    isError: Boolean ,
+    error: String = "Please enter valid password"
 ) {
     var isPasswordVisible by remember { mutableStateOf(false) }
 
@@ -163,8 +196,11 @@ fun PasswordTextField(
         IconButton(onClick = {
             isPasswordVisible = !isPasswordVisible
         }) {
-            Icon(if(isPasswordVisible) Icons.Default.Check else Icons.Default.Close
-                , contentDescription = "", tint = Color.LightGray)
+            Icon(
+                if (isPasswordVisible) Icons.Default.Check else Icons.Default.Close,
+                contentDescription = "",
+                tint = Color.LightGray
+            )
         }
 
     }
@@ -175,7 +211,7 @@ fun PasswordTextField(
         onValueChange = onChange,
         modifier = modifier,
         leadingIcon = leadingIcon,
-        trailingIcon= trailingIcon,
+        trailingIcon = trailingIcon,
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Next, keyboardType = KeyboardType.Text
         ),
@@ -189,17 +225,27 @@ fun PasswordTextField(
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Color.DarkGray, textColor = Color.DarkGray
         ),
+        isError = isError
     )
+    if (isError) {
+        Text(
+            text = error,
+            color = MaterialTheme.colors.error,
+            style = MaterialTheme.typography.caption,
+            modifier = Modifier.padding(start = 16.dp, top = 0.dp)
+        )
+    }
+
 }
 
 @Composable
 fun LabeledCheckBox(
     label: String,
-    isChecked : Boolean,
-    forgotPass : String,
-    onCheckChanged :() ->Unit
+    isChecked: Boolean,
+    forgotPass: String,
+    onCheckChanged: () -> Unit
 
-){
+) {
 
     Row(
         modifier = Modifier.clickable {
