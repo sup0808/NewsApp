@@ -1,6 +1,6 @@
 package com.demo.newsapp.data.model
 
 data class LoginModel(
-    val status : Int,
-    val message : String
+    val metadata: Metadata? = null,
+    val record: Record? = null
 )

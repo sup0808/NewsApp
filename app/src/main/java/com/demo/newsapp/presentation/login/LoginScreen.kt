@@ -36,6 +36,7 @@ import androidx.compose.material.icons.filled.Lock
 
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -61,6 +62,19 @@ fun LoginScreen(
     navController: NavHostController,
     loginViewModel: LoginViewModel = hiltViewModel()
 ) {
+    val loginstate = loginViewModel.loginState.value
+
+    when(loginstate.status){
+        200 ->{
+            LaunchedEffect(key1 = Unit) {
+                navController.navigate(MainDestination.HOME_ROUTE)
+            }
+
+        }
+        404 -> {
+
+        }
+    }
 
     Box(
         modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center

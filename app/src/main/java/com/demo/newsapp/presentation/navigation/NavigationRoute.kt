@@ -2,6 +2,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.demo.newsapp.presentation.home.HomeScreen
 
 object MainDestination {
     const val SPLASH_ROUTE = "splash"
@@ -23,7 +24,7 @@ fun NavigatorRoute() {
             LoginScreen(navController)
         }
         composable(route = MainDestination.HOME_ROUTE){
-
+            HomeScreen(navController)
         }
     }
 }
