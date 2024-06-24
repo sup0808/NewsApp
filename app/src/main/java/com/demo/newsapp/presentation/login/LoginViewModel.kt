@@ -9,9 +9,10 @@ import com.demo.newsapp.presentation.login.state.LoginEvent
 import com.demo.newsapp.presentation.login.state.UserState
 import com.demo.newsapp.util.FormValidator
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel : ViewModel() {
+class LoginViewModel @Inject constructor(): ViewModel() {
 
     var userState = mutableStateOf(UserState())
     private set
@@ -42,10 +43,10 @@ class LoginViewModel : ViewModel() {
 
     fun validateUserLogin(){
         val isEmailId = FormValidator.validateEmailId(userState.value.emailId)
-        _errorState.value = _errorState.value.copy(emailStatus = isEmailId)
+        _errorState.value = _errorState.value.copy(emailStatus = !isEmailId)
 
         val isPassword = FormValidator.validatePassword(userState.value.password)
-        _errorState.value = _errorState.value.copy(passwordStatus = isPassword)
+        _errorState.value = _errorState.value.copy(passwordStatus = !isPassword)
 
         if(isEmailId && isPassword){
             println("validated ")

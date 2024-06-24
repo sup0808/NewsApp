@@ -69,7 +69,7 @@ fun LoginScreen(
         Card(
             shape = RoundedCornerShape(10.dp),
             elevation = 10.dp,
-            backgroundColor = Color.Gray,
+            backgroundColor = Color.Cyan,
             modifier = Modifier
                 .wrapContentWidth()
                 .wrapContentHeight()
@@ -84,7 +84,7 @@ fun LoginScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 UserNameField(
-                    value = "Username",
+                    value = loginViewModel.userState.value.emailId,
                     onChange = {
                         loginViewModel.onAction(LoginEvent.EmailChanged(it))
                     },
@@ -93,7 +93,7 @@ fun LoginScreen(
 
                 )
                 PasswordTextField(
-                    value = "Password",
+                    value = loginViewModel.userState.value.password,
                     onChange = {
                       loginViewModel.onAction(LoginEvent.PasswordChanged(it))
                     },
@@ -140,7 +140,7 @@ fun UserNameField(
 ) {
     val leadingIcon = @Composable {
         Icon(
-            Icons.Default.AccountCircle, contentDescription = "", tint = Color.LightGray
+            Icons.Default.AccountCircle, contentDescription = "", tint = Color.Blue
         )
     }
 
@@ -155,12 +155,12 @@ fun UserNameField(
         /* keyboardActions = KeyboardActions(
              onNext = { focusManager.moveFocus(FocusDirection.Down) }
          ),*/
-        placeholder = { Text(placeholder, style = TextStyle(color = Color.LightGray)) },
-        label = { Text(label, style = TextStyle(color = Color.DarkGray)) },
+        placeholder = { Text(placeholder, style = TextStyle(color = Color.Blue)) },
+        label = { Text(label, style = TextStyle(color = Color.Blue)) },
         singleLine = true,
         visualTransformation = VisualTransformation.None,
         colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = Color.DarkGray, textColor = Color.DarkGray
+            focusedBorderColor = Color.Blue, textColor = Color.Blue
         ),
         isError = isError
         )
@@ -189,7 +189,7 @@ fun PasswordTextField(
     var isPasswordVisible by remember { mutableStateOf(false) }
 
     val leadingIcon = @Composable {
-        Icon(Icons.Default.Lock, contentDescription = "", tint = Color.LightGray)
+        Icon(Icons.Default.Lock, contentDescription = "", tint = Color.Blue)
     }
 
     val trailingIcon = @Composable {
@@ -218,12 +218,12 @@ fun PasswordTextField(
         /* keyboardActions = KeyboardActions(
              onNext = { focusManager.moveFocus(FocusDirection.Down) }
          ),*/
-        placeholder = { Text(placeholder, style = TextStyle(color = Color.LightGray)) },
-        label = { Text(label, style = TextStyle(color = Color.DarkGray)) },
+        placeholder = { Text(placeholder, style = TextStyle(color = Color.Blue)) },
+        label = { Text(label, style = TextStyle(color = Color.Blue)) },
         singleLine = true,
         visualTransformation = VisualTransformation.None,
         colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = Color.DarkGray, textColor = Color.DarkGray
+            focusedBorderColor = Color.Blue, textColor = Color.Blue
         ),
         isError = isError
     )
@@ -253,10 +253,9 @@ fun LabeledCheckBox(
         }) {
         Checkbox(checked = isChecked, onCheckedChange = null)
         Spacer(modifier = Modifier.width(5.dp))
-        Text(text = label, style = TextStyle(color = Color.DarkGray))
+        Text(text = label, style = TextStyle(color = Color.Blue))
         Spacer(Modifier.weight(1f))
-        Text(text = forgotPass, style = TextStyle(color = Color.DarkGray))
+        Text(text = forgotPass, style = TextStyle(color = Color.Blue))
     }
 
 }
-
